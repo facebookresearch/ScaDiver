@@ -1,3 +1,5 @@
+# Copyright (c) Facebook, Inc. and its affiliates. 
+
 """A wrapper for pybullet to manage different clients."""
 from __future__ import absolute_import
 from __future__ import division

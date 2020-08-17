@@ -1,3 +1,5 @@
+# Copyright (c) Facebook, Inc. and its affiliates. 
+
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
