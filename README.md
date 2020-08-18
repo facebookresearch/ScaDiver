@@ -40,3 +40,7 @@ python3 rllib_driver.py --mode load --spec data/spec/test_env_humanoid_imitation
 ```
 ...
 ```
+
+## License
+
+ScaDiver is released under the [BSD-3-Clause License](https://github.com/fairinternal/ScaDiver/blob/master/LICENSE).
