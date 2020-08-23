@@ -211,3 +211,8 @@ action:
     range_min_pol: -3.0
     range_max_pol: 3.0
 ```
+=======
+## License
+
+ScaDiver is released under the [BSD-3-Clause License](https://github.com/fairinternal/ScaDiver/blob/master/LICENSE).
+>>>>>>> 820c5c115d2d11d340e153c72b580b98a984fe9d

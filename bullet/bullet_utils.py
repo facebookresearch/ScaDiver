@@ -1,3 +1,5 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+
 import numpy as np
 from fairmotion.processing import operations
 

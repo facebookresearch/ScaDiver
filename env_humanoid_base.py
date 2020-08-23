@@ -1,3 +1,4 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
 
 import os
 # os.environ['OPENBLAS_NUM_THREADS'] = '1'
