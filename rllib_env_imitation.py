@@ -111,10 +111,6 @@ class EnvRenderer(er.EnvRenderer):
         elif key == b'e':
             self.explore = not self.explore
             print('Exploration:', self.explore)
-        elif key == b's':
-            model = self.trainer.get_policy().model
-            model.save_weights_body_encoder('data/temp/body_encoder.pt')
-            model.save_weights_motor_decoder('data/temp/motor_decoder.pt')
         elif key == b'c':
             ''' Read a directory for saving images and try to create it '''
             subdir = input("Enter subdirectory for screenshot file: ")
@@ -152,18 +148,7 @@ def default_cam():
 env_cls = HumanoidImitation
 
 def config_override(spec):
-    env = env_cls(spec["config"]["env_config"])
-
     model_config = copy.deepcopy(spec["config"]["model"])
-    model = model_config.get("custom_model")
-    if model and model == "task_agnostic_policy_type1":
-        model_config.get("custom_options").update({
-            "observation_space_body": copy.deepcopy(env.observation_space_body),
-            "observation_space_task": copy.deepcopy(env.observation_space_task),
-        })
-
-    del env
-
     config = {
         # "callbacks": {},
         "model": model_config,
