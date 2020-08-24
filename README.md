@@ -70,7 +70,7 @@ python rllib_driver.py --mode load --spec data/spec/test_env_humanoid_imitation.
 
 #### Learning Experts and Mixture of Experts Controllers
 
-To learn expert controllers for a set of heterogeneous motion capture data, we first need to cluster the data according to some motion features. For this, please refer to an example in [fairmotion] (https://github.com/fairinternal/fairmotion) about *motion clustering*. After clustering the data, each expert controller can be learned by using only data involved in each cluster.
+To learn expert controllers for a set of heterogeneous motion capture data, we first need to cluster the data according to some motion features. For this, please refer to an example in [fairmotion](https://github.com/fairinternal/fairmotion) about *motion clustering*. After clustering the data, each expert controller can be learned by using only data involved in each cluster.
 
 ```
 python rllib_driver.py --mode train --spec data/spec/spec_env_humanoid_imitation_expert0.yaml --project_dir ./ --local_dir ./data/learning/experts/
