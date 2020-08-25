@@ -9,10 +9,9 @@ import re
 import random
 
 from fairmotion.utils import utils
-from fairmotion.utils import conversions
-from fairmotion.processing import operations
-from fairmotion.motion.motion import Motion
-from fairmotion.motion.velocity import MotionWithVelocity
+from fairmotion.ops import conversions
+from fairmotion.core.motion import Motion
+from fairmotion.core.velocity import MotionWithVelocity
 from fairmotion.data import bvh
 
 import env_humanoid_base

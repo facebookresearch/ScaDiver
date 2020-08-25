@@ -19,9 +19,9 @@ import pybullet_data
 from bullet import bullet_client
 from bullet import bullet_utils as bu
 
-from fairmotion.utils import conversions
+from fairmotion.ops import conversions
+from fairmotion.ops import math
 from fairmotion.utils import constants
-from fairmotion.processing import operations
 
 import sim_agent
 import sim_obstacle
@@ -124,7 +124,7 @@ class Env(object):
         if np.allclose(np.array([0.0, 0.0, 1.0]), self._v_up):
             R_plane = constants.eye_R()
         else:
-            R_plane = operations.R_from_vectors(np.array([0.0, 0.0, 1.0]), self._v_up)
+            R_plane = math.R_from_vectors(np.array([0.0, 0.0, 1.0]), self._v_up)
         self._plane_id = \
             self._pb_client.loadURDF(
                 "plane_implicit.urdf", 
@@ -243,14 +243,14 @@ class Env(object):
             T = ref_pose.get_transform(agent._char_info.bvh_map[j], local=True)
             R, p = conversions.T2Rp(T)
             if joint_type == self._pb_client.JOINT_SPHERICAL:
-                dR = operations.random_rotation(
+                dR = math.random_rotation(
                     mu_theta=agent._char_info.noise_pose[j][0],
                     sigma_theta=agent._char_info.noise_pose[j][1],
                     lower_theta=agent._char_info.noise_pose[j][2],
                     upper_theta=agent._char_info.noise_pose[j][3])
                 dof_cnt += 3
             elif joint_type == self._pb_client.JOINT_REVOLUTE:
-                theta = operations.truncnorm(
+                theta = math.truncnorm(
                     mu=agent._char_info.noise_pose[j][0],
                     sigma=agent._char_info.noise_pose[j][1],
                     lower=agent._char_info.noise_pose[j][2],
@@ -263,7 +263,7 @@ class Env(object):
             T_new = conversions.Rp2T(np.dot(R, dR), p)
             ref_pose.set_transform(agent._char_info.bvh_map[j], T_new, do_ortho_norm=False, local=True)
             if vel is not None:
-                dw = operations.truncnorm(
+                dw = math.truncnorm(
                     mu=np.full(3, agent._char_info.noise_vel[j][0]),
                     sigma=np.full(3, agent._char_info.noise_vel[j][1]),
                     lower=np.full(3, agent._char_info.noise_vel[j][2]),
@@ -286,7 +286,7 @@ class Env(object):
                 if rm.flag['shadow']:
                     rm.gl.glPushMatrix()
                     d = np.array([1, 1, 1])
-                    d = d - operations.projectionOnVector(d, char_info.v_up_env)
+                    d = d - math.projectionOnVector(d, char_info.v_up_env)
                     offset = (0.001 + ground_height) * char_info.v_up_env
                     rm.gl.glTranslatef(offset[0], offset[1], offset[2])
                     rm.gl.glScalef(d[0], d[1], d[2])

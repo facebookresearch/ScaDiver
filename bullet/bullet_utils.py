@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 import numpy as np
-from fairmotion.processing import operations
+from fairmotion.ops import quaternion
 
 '''
 Bullet uses 'xyzw' order for the quaternion. quat_out_order lets
@@ -14,7 +14,7 @@ def set_base_pQvw(pb_client, body_id, p, Q, v=None, w=None):
     Set positions, orientations, linear and angular velocities of the base link.
     ''' 
     if not xyzw_in:
-        Q = operations.Q_op(Q, op=['change_order'], xyzw_in=False)
+        Q = quaternion.Q_op(Q, op=['change_order'], xyzw_in=False)
     pb_client.resetBasePositionAndOrientation(body_id, p, Q)
     if v is not None and w is not None:
         pb_client.resetBaseVelocity(body_id, v, w)
@@ -26,7 +26,7 @@ def get_base_pQvw(pb_client, body_id):
     p, Q = pb_client.getBasePositionAndOrientation(body_id)
     p, Q = np.array(p), np.array(Q)
     if not xyzw_in:
-        Q = operations.Q_op(Q, op=['change_order'], xyzw_in=True)
+        Q = quaternion.Q_op(Q, op=['change_order'], xyzw_in=True)
     
     v, w = pb_client.getBaseVelocity(body_id)
     v, w = np.array(v), np.array(w)
@@ -48,7 +48,7 @@ def get_link_pQvw(pb_client, body_id, indices=None):
     ps = [np.array(ls[j][0]) for j in range(num_indices)]
     if not xyzw_in:
         Qs = [
-            operations.Q_op(np.array(ls[j][1]), op=['change_order'], xyzw_in=True) \
+            quaternion.Q_op(np.array(ls[j][1]), op=['change_order'], xyzw_in=True) \
             for j in range(num_indices)]
     else:
         Qs = [np.array(ls[j][1]) for j in range(num_indices)]
@@ -88,7 +88,7 @@ def set_joint_pv(pb_client, body_id, indices, ps, vs):
     for i in range(len(ps_processed)):
         if len(ps_processed[i]) == 4 and not xyzw_in:
             ps_processed[i] = \
-                operations.Q_op(ps_processed[i], op=['change_order'], xyzw_in=False)
+                quaternion.Q_op(ps_processed[i], op=['change_order'], xyzw_in=False)
     pb_client.resetJointStatesMultiDof(body_id, indices, ps_processed, vs)
 
 def get_joint_pv(pb_client, body_id, indices=None):
@@ -110,7 +110,7 @@ def get_joint_pv(pb_client, body_id, indices=None):
         p = np.array(js[j][0])
         v = np.array(js[j][1])
         if len(p) == 4 and not xyzw_in:
-            p = operations.Q_op(p, op=['change_order'], xyzw_in=True)
+            p = quaternion.Q_op(p, op=['change_order'], xyzw_in=True)
         ps.append(p)
         vs.append(v)
 
