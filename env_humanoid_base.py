@@ -7,10 +7,11 @@ import copy
 from enum import Enum
 from collections import deque
 
-from fairmotion.utils import conversions
-from fairmotion.processing import operations
-from fairmotion.motion.motion import Pose
-from fairmotion.motion.velocity import MotionWithVelocity
+from fairmotion.ops import conversions
+from fairmotion.ops import math
+from fairmotion.ops import quaternion
+from fairmotion.core.motion import Pose
+from fairmotion.core.velocity import MotionWithVelocity
 from fairmotion.data import bvh
 
 import env_humanoid_tracking
@@ -178,7 +179,7 @@ class Env(metaclass=ABCMeta):
         self._action_space = []
         for i in range(self._num_agent):
             dim = self._sim_agent[i].get_num_dofs()
-            normalizer = operations.Normalizer(
+            normalizer = math.Normalizer(
                 real_val_max=config['action']['range_max']*np.ones(dim),
                 real_val_min=config['action']['range_min']*np.ones(dim),
                 norm_val_max=config['action']['range_max_pol']*np.ones(dim),
@@ -474,7 +475,7 @@ class Env(metaclass=ABCMeta):
                 state.append(p_rel) # relative position w.r.t. the reference frame
             if include_Q:
                 Q_rel = conversions.R2Q(np.dot(R_ref_inv, conversions.Q2R(Q)))
-                Q_rel = operations.Q_op(Q_rel, op=["normalize", "halfspace"])
+                Q_rel = quaternion.Q_op(Q_rel, op=["normalize", "halfspace"])
                 state.append(Q_rel) # relative rotation w.r.t. the reference frame
             if include_v:
                 v_rel = np.dot(R_ref_inv, v)
@@ -616,7 +617,7 @@ class Env(metaclass=ABCMeta):
 
             if 'weight_schedule' in fn_def.keys():
                 timesteps_total = self._learning_info['timesteps_total']
-                w *= operations.lerp_from_paired_list(
+                w *= math.lerp_from_paired_list(
                     timesteps_total, fn_def['weight_schedule'])
             
             if kernel is None or kernel['type'] == "none":

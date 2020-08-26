@@ -3,8 +3,8 @@
 from enum import Enum
 import numpy as np
 
-from fairmotion.utils import conversions
-from fairmotion.processing import operations
+from fairmotion.ops import conversions
+from fairmotion.ops import math
 
 from bullet import bullet_utils as bu
 
@@ -88,12 +88,12 @@ class ObstacleManager(object):
     def throw(self, pos_target, num=1, duration=2.0, shape=Shape.BOX, vel=8.0, r_out=2.0, r_in=0.2, mass=2.0, size=0.2*np.ones(3), h_min=0.5):
         assert r_out > r_in
         for _ in range(num):
-            d_out = operations.random_unit_vector()
-            d_in = operations.random_unit_vector()
+            d_out = math.random_unit_vector()
+            d_in = math.random_unit_vector()
             
             p_from = pos_target + r_out * d_out
             
-            p_projected_h = operations.projectionOnVector(p_from, self.v_up_env)
+            p_projected_h = math.projectionOnVector(p_from, self.v_up_env)
             h_cliped = max(np.linalg.norm(p_projected_h), h_min)
             p_from = (p_from-p_projected_h) + h_cliped * self.v_up_env
             p_to = pos_target + r_in * d_in
@@ -102,7 +102,7 @@ class ObstacleManager(object):
 
             p = p_from
             Q = conversions.A2Q(
-                operations.random_unit_vector()*np.random.uniform(-np.pi, np.pi))
+                math.random_unit_vector()*np.random.uniform(-np.pi, np.pi))
             v = vel * v_dir
             w = np.zeros(3)
             obs = Obstacle("", duration, shape, mass, size, p, Q, v, w)

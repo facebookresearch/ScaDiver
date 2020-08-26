@@ -5,10 +5,11 @@ from enum import Enum
 
 from bullet import bullet_utils as bu
 
-from fairmotion.utils import conversions
+from fairmotion.ops import conversions
+from fairmotion.ops import math
+from fairmotion.ops import quaternion
 from fairmotion.utils import constants
-from fairmotion.processing import operations
-from fairmotion.motion import motion
+from fairmotion.core import motion
 
 import warnings
 
@@ -226,7 +227,7 @@ class SimAgent(object):
     
     def get_root_height_from_ground(self, ground_height=0.0):
         p, _, _, _ = bu.get_base_pQvw(self._pb_client, self._body_id)
-        vec_root_from_ground = operations.projectionOnVector(p, self._char_info.v_up_env)
+        vec_root_from_ground = math.projectionOnVector(p, self._char_info.v_up_env)
         return np.linalg.norm(vec_root_from_ground) - ground_height
     
     def get_root_state(self):
@@ -267,15 +268,15 @@ class SimAgent(object):
                 'Be careful if your system is sensitive to the facing direction\n'+\
                 '+++++++++++++++++++++++++++++++++++++++++++\n'
             warnings.warn(msg)
-            d = operations.random_unit_vector()
-        d = d - operations.projectionOnVector(d, self._char_info.v_up_env)
-        p = p - operations.projectionOnVector(p, self._char_info.v_up_env)
+            d = math.random_unit_vector()
+        d = d - math.projectionOnVector(d, self._char_info.v_up_env)
+        p = p - math.projectionOnVector(p, self._char_info.v_up_env)
         if ground_height != 0.0:
             p += ground_height * self._char_info.v_up_env
         return d/np.linalg.norm(d), p
     
     def project_to_ground(self, v):
-        return v - operations.projectionOnVector(v, self._char_info.v_up_env)
+        return v - math.projectionOnVector(v, self._char_info.v_up_env)
     
     def get_link_states(self, indices=None):
         return bu.get_link_pQvw(self._pb_client, self._body_id, indices)
@@ -314,8 +315,8 @@ class SimAgent(object):
                 joint_axis = self.get_joint_axis(j)
                 R, p = conversions.T2Rp(T)
                 w = np.zeros(3)
-                state_pos.append(operations.project_rotation_1D(R, joint_axis))
-                state_vel.append(operations.project_angular_vel_1D(w, joint_axis))
+                state_pos.append(math.project_rotation_1D(R, joint_axis))
+                state_vel.append(math.project_angular_vel_1D(w, joint_axis))
             else:
                 raise NotImplementedError()
             indices.append(j)
@@ -370,8 +371,8 @@ class SimAgent(object):
                     joint_axis = self.get_joint_axis(j)
                     R, p = conversions.T2Rp(T)
                     w = np.zeros(3) if vel is None else vel.get_angular(self._char_info.bvh_map[j], local=True)
-                    state_pos.append([operations.project_rotation_1D(R, joint_axis)])
-                    state_vel.append([operations.project_angular_vel_1D(w, joint_axis)])
+                    state_pos.append([math.project_rotation_1D(R, joint_axis)])
+                    state_vel.append([math.project_angular_vel_1D(w, joint_axis)])
                 else:
                     raise NotImplementedError()
             indices.append(j)
@@ -528,12 +529,12 @@ class SimAgent(object):
                     w = vel.get_angular(self._char_info.bvh_map[j])
                 if joint_type == self._pb_client.JOINT_REVOLUTE:
                     axis = self.get_joint_axis(j)
-                    target_pos = np.array([operations.project_rotation_1D(conversions.T2R(T), axis)])
-                    target_vel = np.array([operations.project_angular_vel_1D(w, axis)])
+                    target_pos = np.array([math.project_rotation_1D(conversions.T2R(T), axis)])
+                    target_vel = np.array([math.project_angular_vel_1D(w, axis)])
                     max_force = np.array([self._char_info.max_force[j]])
                 elif joint_type == self._pb_client.JOINT_SPHERICAL:
                     Q, p = conversions.T2Qp(T)
-                    Q = operations.Q_op(Q, op=["normalize", "halfspace"])
+                    Q = quaternion.Q_op(Q, op=["normalize", "halfspace"])
                     target_pos = Q
                     target_vel = w
                     max_force = np.ones(3) * self._char_info.max_force[j]

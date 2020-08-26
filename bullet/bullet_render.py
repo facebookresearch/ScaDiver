@@ -6,7 +6,7 @@ from OpenGL.GLU import *
 import numpy as np
 import pybullet
 from fairmotion.viz import gl_render
-from fairmotion.utils import conversions
+from fairmotion.ops import conversions
 from fairmotion.utils import constants
 
 
