@@ -16,16 +16,15 @@ flag['ground'] = True
 flag['origin'] = False
 flag['shadow'] = True
 flag['sim_model'] = True
-flag['kin_model'] = False
+flag['kin_model'] = True
 flag['joint'] = False
 flag['com_vel'] = False
 flag['collision'] = True
-flag['overlay'] = False
+flag['overlay'] = True
 flag['target_pose'] = False
 flag['auto_play'] = False
 flag['fog'] = False
 flag['facing_frame'] = False
-flag['interaction'] = True
 flag['obstacle'] = True
 
 toggle = {}
@@ -43,7 +42,6 @@ toggle[b't'] = 'target_pose'
 toggle[b'a'] = 'auto_play'
 toggle[b'f'] = 'fog'
 toggle[b'F'] = 'facing_frame'
-toggle[b'i'] = 'interaction'
 toggle[b'o'] = 'obstacle'
 
 tex_id_ground = None

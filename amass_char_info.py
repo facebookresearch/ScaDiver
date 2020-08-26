@@ -166,29 +166,6 @@ bvh_map_inv["rshoulder"] = rshoulder
 bvh_map_inv["relbow"] = relbow
 bvh_map_inv["rwrist"] = rwrist
 
-# dof = {
-#     root : 6,
-#     lhip : 3,
-#     lknee : 3,
-#     lankle : 3,
-#     rhip : 3,
-#     rknee : 3,
-#     rankle : 3,
-#     lowerback : 3,
-#     upperback : 3,
-#     chest : 3,
-#     lowerneck : 3,
-#     upperneck : 3,
-#     lclavicle : 3,
-#     lshoulder : 3,
-#     lelbow : 3,
-#     lwrist : 0,
-#     rclavicle : 3,
-#     rshoulder : 3,
-#     relbow : 3,
-#     rwrist : 0,
-#     }
-
 ''' 
 Definition of PD gains (tuned for Stable PD Controller)
 '''
@@ -360,42 +337,3 @@ for key, val in joint_weight.items():
     sum_joint_weight += val
 for key, val in joint_weight.items():
     joint_weight[key] /= sum_joint_weight
-
-interaction_mesh_samples = [
-    # Joints
-    (root, None, 1.0),
-    (lhip, None, 1.0),
-    (lknee, None, 1.0),
-    (lankle, None, 1.0),
-    (rhip, None, 1.0),
-    (rknee, None, 1.0),
-    (rankle, None, 1.0),
-    (lowerback, None, 1.0),
-    (upperback, None, 1.0),
-    (chest, None, 1.0),
-    (lowerneck, None, 1.0),
-    (upperneck, None, 1.0),
-    (lclavicle, None, 1.0),
-    (lshoulder, None, 1.0),
-    (lelbow, None, 1.0),
-    (lwrist, None, 1.0),
-    (rclavicle, None, 1.0),
-    (rshoulder, None, 1.0),
-    (relbow, None, 1.0),
-    (rwrist, None, 1.0),
-    # Intermediate Points
-    (lhip, lknee, 0.5),
-    (lknee, lankle, 0.5),
-    (lshoulder, lelbow, 0.5),
-    (lelbow, lwrist, 0.5),
-    (rhip, rknee, 0.5),
-    (rknee, rankle, 0.5),
-    (rshoulder, relbow, 0.5),
-    (relbow, rwrist, 0.5),
-]
-
-interaction_mesh_samples_bvh = []
-for j1, j2, w in interaction_mesh_samples:
-    j1_bvh = bvh_map[j1] if j1 is not None else j1
-    j2_bvh = bvh_map[j2] if j2 is not None else j2
-    interaction_mesh_samples_bvh.append((j1_bvh, j2_bvh, w))

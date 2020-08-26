@@ -4,7 +4,7 @@ import os
 
 ''' 
 This forces the environment to use only 1 cpu when running.
-This is helpful to launch multiple environment simulatenously.
+This could be helpful when launching multiple environment simulatenously.
 '''
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'

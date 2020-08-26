@@ -565,7 +565,7 @@ class SimAgent(object):
                                                               positionGains=kps,
                                                               velocityGains=kds)
         elif self._actuation==SimAgent.Actuation.PD:
-            ''' Basic PD in Bullet does not support spherical joint yet '''
+            ''' Standard PD in Bullet does not support spherical joint yet '''
             # self._pb_client.setJointMotorControlMultiDofArray(self._body_id,
             #                                                   joint_indices,
             #                                                   self._pb_client.PD_CONTROL,

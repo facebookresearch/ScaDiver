@@ -25,7 +25,7 @@ config:
     num_gpus_per_worker: 0
     model:
         custom_model: fcnn
-        custom_options:
+        custom_model_config:
             log_std_type: constant
             sample_std: 0.1
     num_workers: 8
@@ -102,12 +102,13 @@ config:
             ref_motion_scale:
                 - 1.0
             base_motion_file:
-                - data/motion/amass/amass_hierarchy.bvh
+                - data/motion/amass_hierarchy.bvh
             ref_motion_db:
                 -
                     data:
                         dir:
-                            - data/motion/cmu/cluster4/
+                            # We assume that all motions in the cluster4 are in this directory
+                            - data/motion/cmu/expert4/
             actuation: 
                 - spd
             self_collision: 

@@ -1,10 +1,5 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
-'''
-python rllib_driver.py --mode train --spec data/config/train_faircluster_env_imitation_exp30.yaml --project_dir /home/jungdam/Research/ScaDive/ --local_dir XXX
-python rllib_driver.py --mode load --spec data/config/train_faircluster_env_imitation_exp30.yaml --project_dir /home/jungdam/Research/ScaDive/ --checkpoint YYY
-'''
-
 import argparse
 import os
 import yaml

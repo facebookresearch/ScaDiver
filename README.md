@@ -1,12 +1,12 @@
 # ScaDiver
 
-![ScaDiver!](./data/image/teaser.png "Teaser")
-
 ## Introduction
 
-This repository provides executable codes for the paper *A Scalable Approach to Control Diverse Behaviors for Physically Simulated Characters*, which was published in SIGGRAPH 2020. Click [here](https://research.fb.com/publications/a-scalable-approach-to-control-diverse-behaviors-for-physically-simulated-characters/) to see the paper. The name of the project originates from the two keywords in the name of the paper, which are "**SCA**lable" and "**DIVER**se". 
+[![ScaDiver](./data/image/scadiver_video.png)](https://www.youtube.com/watch?v=QnIwwAKX5H4&t)
 
-Please note that we are not able to guarantee that the codes will work if it is run with settings that we do not intend when we develop for the project. We would appreciate it if users could report the problems.
+This repository provides executable codes for the paper *A Scalable Approach to Control Diverse Behaviors for Physically Simulated Characters*, which was published in SIGGRAPH 2020. Click [here](https://research.fb.com/publications/a-scalable-approach-to-control-diverse-behaviors-for-physically-simulated-characters/) to see the paper. The name of the project originates from the two keywords in the name of the paper, which are **SCA**lable and **DIVER**se.
+
+Please note that we are not able to guarantee that the codes will work if it is run with settings that we did not intend when we developed for the project. We would appreciate it if users could report the problems when they find it.
 
 ## Citation
 
@@ -29,25 +29,28 @@ Please note that we are not able to guarantee that the codes will work if it is 
 
 ### Installation
 
-#### Python Virtual Environment
-```
-```
+Although we only confirmed that the codes work correctly in Ubuntu (18.04) environment, probably it will work in other environments without much troubles if it is installed in a fresh Python virtual environment, which we recommend users to use to prevent from mixing different pakage versions.
 
 #### ScaDiver
+
 ```
-git clone xxx
+git clone https://github.com/fairinternal/ScaDiver
 ```
 
 #### fairmotion
+
 [fairmotion](https://github.com/fairinternal/fairmotion) provides functionalities to process motion capture data and, to compute kinematics, to visualize simulated characters and environments.
+
 ```
 pip install fairmotion
 ```
 
 #### others
+
 We use [PyBullet](https://pybullet.org/wordpress/) for physics simulation and [rllib](https://docs.ray.io/en/latest/rllib.html) for reinforcement learning. 
+
 ```
-pip install pybullet==2.7.3 ray[rllib]==0.8.6 pandas requests
+pip install pybullet==2.7.3 ray[rllib]==0.8.7 pandas requests
 ```
 
 ### Examples
@@ -83,6 +86,18 @@ After expert controllers are learned, they can be combined as a single *mixture-
 
 ```
 python rllib_driver.py --mode train --spec data/spec/spec_env_humanoid_imitation_moe.yaml --project_dir ./ --local_dir ./data/learning/moe/
+```
+
+When the training process is performed, it will automatically create logs by using Tensorboard in the *local_dir/project_name*. The status can be checked by the script below.
+
+```
+tensorboard --logdir="directory_where_tensorboard_log_exists"
+```
+
+According to the iteration number specified in the specification file, it will automatically save intermediate results in the *local_dir/project_name/checkpoint/*. Testing the controllers can be done as below.
+
+```
+python rllib_driver.py --mode load --spec "some_specification_file" --project_dir ./ --checkpoint "some_saved_checkpoint_file"
 ```
 
 ### Specification File
@@ -236,7 +251,11 @@ action:
 
 ## Using Clusters
 
-Because our framework is based on *rllib*, it can run not only on a single machine with multiple cores but also on clusters such as AWS, Azure, or customized one managed by Slurm. Please refer to [this] (https://docs.ray.io/en/latest/cluster/index.html) for more detail.
+Because our framework is based on *rllib*, it can run not only on a single machine with multiple cores but also on clusters such as AWS, Azure, or customized one managed by Slurm. Please refer to [this](https://docs.ray.io/en/latest/cluster/index.html) for more detail.
+
+## Pretrained Model
+
+To be updated.
 
 ## License
 

@@ -24,10 +24,73 @@ config:
     num_cpus_per_worker: 1
     num_gpus_per_worker: 0
     model:
-        custom_model: fcnn
-        custom_options:
+        custom_model: moe_additive
+        custom_model_config:
             log_std_type: constant
             sample_std: 0.1
+            expert_hiddens:
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+                - [128, 128]
+            expert_activations:
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+                - [relu, relu, linear]
+            expert_init_weights:
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+                - [1.0, 1.0, 0.01]
+            expert_log_std_types:
+                - constant
+                - constant
+                - constant
+                - constant
+                - constant
+                - constant
+                - constant
+                - constant
+            expert_sample_stds:
+                - 0.1
+                - 0.1
+                - 0.1
+                - 0.1
+                - 0.1
+                - 0.1
+                - 0.1
+                - 0.1
+            expert_checkpoints:
+                - False
+                - False
+                - False
+                - False
+                - False
+                - False
+                - False
+                - False
+            expert_learnable:
+                - True
+                - True
+                - True
+                - True
+                - True
+                - True
+                - True
+                - True
     num_workers: 8
     num_gpus: 0
     batch_mode: truncate_episodes
@@ -102,11 +165,12 @@ config:
             ref_motion_scale:
                 - 1.0
             base_motion_file:
-                - data/motion/amass/amass_hierarchy.bvh
+                - data/motion/amass_hierarchy.bvh
             ref_motion_db:
                 -
                     data:
                         dir:
+                            # We assume that all motions (cluster0 to cluster7) are in this directory
                             - data/motion/cmu/moe/
             actuation: 
                 - spd

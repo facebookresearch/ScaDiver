@@ -1,9 +1,6 @@
 # Copyright (c) Facebook, Inc. and its affiliates.
 
 import os
-# os.environ['OPENBLAS_NUM_THREADS'] = '1'
-# os.environ['MKL_NUM_THREADS'] = '1'
-# os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 import numpy as np
 import copy
