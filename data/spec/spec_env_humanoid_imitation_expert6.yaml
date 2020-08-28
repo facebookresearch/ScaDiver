@@ -1,0 +1,116 @@
+run: PPO
+name: expert6
+local_dir: /home/jungdam/Research/opensource/ScaDiver/data/learning/cmu/experts/
+checkpoint_freq: 100
+checkpoint_at_end: true
+stop: 
+    time_total_s: 720000
+config:
+    env: HumanoidImitation
+    log_level: WARN
+    gamma: 0.95
+    lambda: 0.95
+    clip_param: 0.2
+    kl_coeff: 0.0
+    vf_clip_param: 1000
+    num_sgd_iter: 20
+    lr: 0.00001
+    sgd_minibatch_size: 500
+    horizon: 900
+    train_batch_size: 50000
+    rollout_fragment_length: 100
+    framework: torch
+    num_envs_per_worker: 1
+    num_cpus_per_worker: 1
+    num_gpus_per_worker: 0
+    model:
+        custom_model: fcnn
+        custom_model_config:
+            log_std_type: constant
+            sample_std: 0.1
+    num_workers: 8
+    num_gpus: 0
+    batch_mode: truncate_episodes
+    observation_filter: NoFilter
+    env_config:
+        lazy_creation: true
+        project_dir: /home/jungdam/Research/opensource/ScaDiver/
+        fps_sim: 480
+        fps_con: 30
+        self_collision: true
+        add_noise: false
+        verbose: false
+        state:
+            choices: ['body', 'task']
+        action:
+            type: "absolute" # 'absolute', 'relative'
+            range_min: -3.0
+            range_max: 3.0
+            range_min_pol: -3.0
+            range_max_pol: 3.0
+        reward: 
+            fn_def:
+                default:
+                    name: total
+                    op: mul
+                    child_nodes:
+                      - name: pose_pos
+                        op: leaf
+                        weight: 1.0
+                        kernel: 
+                            type: gaussian
+                            scale: 40.0
+                      - name: pose_vel
+                        op: leaf
+                        weight: 1.0
+                        kernel: 
+                            type: gaussian
+                            scale: 1.0
+                      - name: ee
+                        op: leaf
+                        weight: 1.0
+                        kernel: 
+                            type: gaussian
+                            scale: 5.0
+                      - name: root
+                        op: leaf
+                        weight: 1.0
+                        kernel: 
+                            type: gaussian
+                            scale: 2.5
+                      - name: com
+                        op: leaf
+                        weight: 1.0
+                        kernel: 
+                            type: gaussian
+                            scale: 2.5
+            fn_map:
+                - default
+        early_term:
+            choices: # 'sim_div', 'sim_window', task_end', 'falldown', 'low_reward'
+                - task_end
+                - low_reward
+            low_reward_thres: 0.1
+            eoe_margin: 0.5
+        character:
+            name:
+                - agent1
+            char_info_module:
+                - amass_char_info.py
+            sim_char_file:
+                - data/character/amass.urdf
+            ref_motion_scale:
+                - 1.0
+            base_motion_file:
+                - data/motion/amass_hierarchy.bvh
+            ref_motion_db:
+                -
+                    data:
+                        dir:
+                            # We assume that all motions in the cluster6 are in this directory
+                            - data/motion/cmu/expert6/
+            actuation: 
+                - spd
+            self_collision: 
+                - true
+            environment_file: []
